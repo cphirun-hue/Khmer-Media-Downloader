@@ -57,13 +57,23 @@ app.get("/api/proxy-download", async (req, res) => {
   }
 
   try {
-    const response = await fetch(videoUrl);
+    const response = await fetch(videoUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': '*/*'
+      }
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch video: ${response.status} ${response.statusText}`);
     }
 
     // Set headers to trigger file download dialog in browser
-    res.setHeader("Content-Disposition", `attachment; filename="${encodeURIComponent(filename)}"`);
+    // Replace quotes in filename to avoid HTTP header injection issues
+    const safeFilename = filename.replace(/["\\]/g, '_');
+    res.setHeader(
+      "Content-Disposition", 
+      `attachment; filename="${safeFilename}"; filename*=UTF-8''${encodeURIComponent(filename)}`
+    );
     res.setHeader("Content-Type", response.headers.get("content-type") || "video/mp4");
 
     const contentLength = response.headers.get("content-length");

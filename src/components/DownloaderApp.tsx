@@ -85,6 +85,11 @@ export default function DownloaderApp({
 
   const [showBrowserPathNotice, setShowBrowserPathNotice] = useState<boolean>(false);
   const [pickedFolderName, setPickedFolderName] = useState<string>('');
+  const [isIframe, setIsIframe] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsIframe(window.self !== window.top);
+  }, []);
 
   const handleBrowseLocalFolder = async () => {
     try {
@@ -561,6 +566,27 @@ export default function DownloaderApp({
                   : 'Paste video link from YouTube, Facebook or TikTok to instantly analyze and generate native full-resolution Windows 11 downloads.'}
               </p>
             </div>
+
+            {/* iframe Warning Banner */}
+            {isIframe && (
+              <div className={`p-4 rounded-2xl border flex gap-3.5 items-start relative animate-fade-in ${
+                darkMode ? 'bg-amber-500/5 border-amber-500/10 text-amber-200/90' : 'bg-amber-50 border-amber-200 text-amber-900'
+              }`}>
+                <div className="p-2 rounded-xl bg-amber-500/10 text-amber-500 shrink-0 mt-0.5">
+                  <Laptop className="w-5 h-5" />
+                </div>
+                <div className="space-y-1.5 text-left flex-1">
+                  <h5 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 text-amber-500">
+                    {isKhmer ? '⚠️ ណែនាំឱ្យបើកក្នុង Tab ថ្មី (Open in New Tab)' : '⚠️ Open in New Tab Recommended'}
+                  </h5>
+                  <p className="text-xs leading-relaxed opacity-90">
+                    {isKhmer 
+                      ? 'ដោយសារគោលការណ៍សុវត្ថិភាពខ្ពស់របស់ Web Browser មុខងារទាញយកវីដេអូខ្លះអាចនឹងត្រូវបានរារាំង ឬចេញសារ "File wasn\'t available on site" នៅក្នុងប្រអប់ Preview នេះ។ ដើម្បីអាចទាញយកបានជោគជ័យ ១០០% សូមចុចប៊ូតុង "Open in new tab" (បើកក្នុង Tab ថ្មី) នៅផ្នែកខាងលើបំផុតក្បែរជម្រើសបិទបើក ដើម្បីទាញយកវីដេអូ!' 
+                      : 'Due to secure web browser security policies, file downloads may be blocked or display "File wasn\'t available on site" inside the Preview iframe. To download successfully 100%, please click the "Open in new tab" button at the very top of your screen to run the app outside of this preview frame!'}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Platform Badges Row */}
             <div className="flex gap-4 select-none">
