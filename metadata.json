@@ -1,0 +1,6 @@
+{
+  "name": "Khmer Media Downloader",
+  "description": "កម្មវិធីទាញយកវីដេអូ YouTube, Facebook, TikTok សម្រាប់ Windows 11 - Universal Video Downloader Styled like Windows 11 Fluent UI",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
